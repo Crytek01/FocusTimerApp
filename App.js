@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { Text, SafeAreaView, StyleSheet, Platform, StatusBar } from 'react-native';
-import Constants from 'expo-constants';
-import { colors } from './src/utils/colors';
+import React, { useState } from "react";
+import { SafeAreaView, StyleSheet, Platform, StatusBar } from "react-native";
+import { colors } from "./src/utils/colors";
 
-import { Focus } from './src/features/Focus.jsx'
-import { Timer } from './src/features/Timer.jsx'
-import { FocusHistory } from './src/features/FocusHistory.jsx'
+import { Focus } from "./src/features/Focus.jsx";
+import { Timer } from "./src/features/Timer.jsx";
+import { FocusHistory } from "./src/features/FocusHistory.jsx";
 
 export default function App() {
   const [currentSubject, setCurrentSubject] = useState(null);
@@ -13,19 +12,20 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {!currentSubject ? 
+      {!currentSubject ? (
         <>
-          <Focus addSubject={setCurrentSubject}/>
-          <FocusHistory history={history} /> 
+          <Focus addSubject={setCurrentSubject} />
+          <FocusHistory history={history} />
         </>
-        :
-        <Timer 
+      ) : (
+        <Timer
           focusSubject={currentSubject}
-          clearSubject={() => {setCurrentSubject(null)}}
+          clearSubject={() => {
+            setCurrentSubject(null);
+          }}
           onTimerEnd={(subject) => setHistory([...history, subject])}
-            
         />
-      }
+      )}
     </SafeAreaView>
   );
 }
@@ -33,7 +33,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     backgroundColor: colors.darkBlue,
   },
 });
