@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, Text, Platform, Vibration } from 'react-native'
-import { useKeepAwake } from 'expo-keep-awake'
+import React, { useState } from "react";
+import { View, StyleSheet, Text, Platform, Vibration } from "react-native";
+import { useKeepAwake } from "expo-keep-awake";
 
-import { ProgressBar } from 'react-native-paper'
+import { ProgressBar } from "react-native-paper";
 
-import { Countdown } from '../components/Countdown.jsx'
-import { RoundedButton } from '../components/RoundedButton.jsx'
-import { Timing } from './Timing.jsx'
+import { Countdown } from "../components/Countdown.jsx";
+import { RoundedButton } from "../components/RoundedButton.jsx";
+import { Timing } from "./Timing.jsx";
 
-import { spacing} from '../utils/sizes'
-import { colors } from '../utils/colors'
-
+import { spacing } from "../utils/sizes";
+import { colors } from "../utils/colors";
 
 const ONE_SECOND_IN_MS = 1000;
 
@@ -22,79 +21,63 @@ const PATTERN = [
   1 * ONE_SECOND_IN_MS,
 ];
 
-
-
 export const Timer = ({ focusSubject, clearSubject, onTimerEnd }) => {
-
   useKeepAwake();
 
   const [isStarted, setIsStarted] = useState(false);
   const [progress, setProgress] = useState(1);
-  const [minutes, setMinutes] = useState(0.1);
+  const [time, setTime] = useState({ minutes: 0.1 });
 
   const onEnd = (reset) => {
     Vibration.vibrate(PATTERN);
-    setIsStarted(false)
-    setProgress(1)
+    setIsStarted(false);
+    setProgress(1);
     onTimerEnd(focusSubject);
     reset();
-  }
-
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.countdown}>
         <Countdown
           isPaused={!isStarted}
-          minutes={minutes} 
+          time={time}
           onProgress={setProgress}
           onEnd={onEnd}
         />
 
-        <View style={{ paddingTop: spacing.xxl}}>
+        <View style={{ paddingTop: spacing.xxl }}>
           <Text style={styles.title}>Focusing on:</Text>
           <Text style={styles.task}>{focusSubject}</Text>
         </View>
       </View>
 
-      <View style={{ paddingTop: spacing.sm}}>
-        <ProgressBar 
-          color={colors.progressBar} 
-          style={{ height: 10}}
+      <View style={{ paddingTop: spacing.sm }}>
+        <ProgressBar
+          color={colors.progressBar}
+          style={{ height: 10 }}
           progress={progress}
         />
       </View>
 
       <View style={styles.timingWrapper}>
-        <Timing onChangeTime={setMinutes} />
+        <Timing onChangeTime={setTime} />
       </View>
-      
+
       <View style={styles.buttonWrapper}>
-        {
-          !isStarted ? 
-          <RoundedButton 
-            title="Start" 
-            onPress={() => setIsStarted(true)} 
-          />
-
-          :
-
-        <RoundedButton title="Pause" 
-          onPress={() => setIsStarted(false)} 
-        />
-        }
+        {!isStarted ? (
+          <RoundedButton title="Start" onPress={() => setIsStarted(true)} />
+        ) : (
+          <RoundedButton title="Pause" onPress={() => setIsStarted(false)} />
+        )}
       </View>
 
       <View style={styles.clearSubjectWrapper}>
-        <RoundedButton
-          size={50} 
-          title="-"  
-          onPress={() => clearSubject(null)} 
-        />
+        <RoundedButton size={50} title="-" onPress={() => clearSubject(null)} />
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -102,8 +85,8 @@ const styles = StyleSheet.create({
   },
   countdown: {
     flex: 0.5,
-    alignItems: 'center', //X
-    justifyContent: 'center', //Y
+    alignItems: "center", //X
+    justifyContent: "center", //Y
   },
   title: {
     color: colors.white,
@@ -111,23 +94,23 @@ const styles = StyleSheet.create({
   },
   task: {
     color: colors.white,
-    fontWeigth: 'bold',
-    textAlign: "center"
+    fontWeight: "bold",
+    textAlign: "center",
   },
   timingWrapper: {
     flex: 0.1,
     padding: spacing.xxl,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   buttonWrapper: {
     flex: 0.3,
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: spacing.md,
     justifyContent: "center",
     alignItems: "center",
   },
   clearSubjectWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'center'
-  }
-})
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+});
